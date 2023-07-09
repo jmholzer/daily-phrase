@@ -52,10 +52,12 @@ def _create_db_engine() -> Engine:
     return create_engine("sqlite:///" + str(DATABASE_LOCATION))
 
 
-def _create_db_and_tables(engine: Engine) -> None:
+def _create_db_and_tables(engine: Engine, drop_existing: bool = False) -> None:
     """
     Create a new database and tables.
     """
+    if drop_existing:
+        SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
 
 
@@ -79,13 +81,6 @@ def _load_phrases(
             native_phrase=phrase["native_phrase"],
         )
         phrase_records.append(phrase_record)
-
-    temp_phrase = Phrase(
-        foreign_language=Language.SPANISH,
-        native_language=Language.ENGLISH,
-        foreign_phrase="Hola!",
-        native_phrase="Hello!",
-    )
 
     with Session(engine) as session:
         session.add_all(phrase_records)
