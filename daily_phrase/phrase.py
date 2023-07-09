@@ -96,10 +96,10 @@ def main():
     """
     Main function of the script. It performs the following steps:
     1. Parse command line arguments.
-    2. Create a database session.
-    3. Get the translations table.
-    4. Load JSON data containing translations.
-    5. Load translations into the database.
+    2. Load JSON data containing the phrases.
+    2. Create a database engine.
+    3. Create the database and tables.
+    5. Insert the phrases into the database.
     """
     args = _parse_args()
     phrases = _load_json_data(args.json)
