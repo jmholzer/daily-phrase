@@ -1,5 +1,4 @@
 import argparse
-from curses import echo
 import json
 from pathlib import Path
 from typing import Dict, List
@@ -92,13 +91,12 @@ def main():
     Main function of the script. It performs the following steps:
     1. Parse command line arguments.
     2. Load JSON data containing the phrases.
-    2. Create a database engine.
-    3. Create the database and tables.
+    3. Create a database engine.
+    4. Create the database and tables.
     5. Insert the phrases into the database.
     """
     args = _parse_args()
     phrases = _load_json_data(args.json)
-
     engine = _create_db_engine()
     _create_db_and_tables(engine)
     _load_phrases(engine, phrases)
