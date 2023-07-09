@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Dict, List
 
-from models import Language, Phrases
+from models import Language, Phrase
 from sqlalchemy.future.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
@@ -72,13 +72,20 @@ def _load_phrases(
     """
     phrase_records = []
     for phrase in phrases:
-        phrase_record = Phrases(
+        phrase_record = Phrase(
             foreign_language=Language[phrase["foreign_language"].upper()],
             native_language=Language[phrase["native_language"].upper()],
             foreign_phrase=phrase["foreign_phrase"],
             native_phrase=phrase["native_phrase"],
         )
         phrase_records.append(phrase_record)
+
+    temp_phrase = Phrase(
+        foreign_language=Language.SPANISH,
+        native_language=Language.ENGLISH,
+        foreign_phrase="Hola!",
+        native_phrase="Hello!",
+    )
 
     with Session(engine) as session:
         session.add_all(phrase_records)
