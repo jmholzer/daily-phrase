@@ -1,52 +1,302 @@
 [
-    {"Spanish": "Estoy buscando un buen libro para leer.", "English": "I'm looking for a good book to read."},
-    {"Spanish": "Necesito hablar contigo acerca de algo importante.", "English": "I need to talk to you about something important."},
-    {"Spanish": "¿Podrías mostrarme dónde está el baño?", "English": "Could you show me where the bathroom is?"},
-    {"Spanish": "No me siento muy bien hoy.", "English": "I'm not feeling very well today."},
-    {"Spanish": "Me gustaría comprar un billete de tren.", "English": "I would like to buy a train ticket."},
-    {"Spanish": "El clima está muy frío hoy.", "English": "The weather is very cold today."},
-    {"Spanish": "¿Cómo te llamas?", "English": "What is your name?"},
-    {"Spanish": "He olvidado mi contraseña.", "English": "I have forgotten my password."},
-    {"Spanish": "¡Feliz cumpleaños a ti!", "English": "Happy birthday to you!"},
-    {"Spanish": "¿Cuándo es la próxima reunión?", "English": "When is the next meeting?"},
-    {"Spanish": "Me encanta la música clásica.", "English": "I love classical music."},
-    {"Spanish": "Por favor, no olvides cerrar la puerta.", "English": "Please don't forget to close the door."},
-    {"Spanish": "Estoy pensando en cambiar de trabajo.", "English": "I'm thinking of changing jobs."},
-    {"Spanish": "¿Podrías ayudarme con estos paquetes?", "English": "Could you help me with these packages?"},
-    {"Spanish": "Quisiera un vaso de agua, por favor.", "English": "I would like a glass of water, please."},
-    {"Spanish": "Tengo una reserva para esta noche.", "English": "I have a reservation for tonight."},
-    {"Spanish": "No sé cómo hacerlo.", "English": "I don't know how to do it."},
-    {"Spanish": "¿Dónde podemos cambiar el dinero?", "English": "Where can we exchange the money?"},
-    {"Spanish": "Hoy es mi primer día de trabajo.", "English": "Today is my first day at work."},
-    {"Spanish": "¿Podría hablar más despacio, por favor?", "English": "Could you speak slower, please?"},
-    {"Spanish": "Este fin de semana voy a visitar a mi familia.", "English": "I'm going to visit my family this weekend."},
-    {"Spanish": "Me perdí en la ciudad.", "English": "I got lost in the city."},
-    {"Spanish": "No entiendo lo que estás diciendo.", "English": "I don't understand what you're saying."},
-    {"Spanish": "¿Puedes recomendarme una buena película?", "English": "Can you recommend a good movie?"},
-    {"Spanish": "Vamos a llegar tarde si no nos vamos ahora.", "English": "We're going to be late if we don't leave now."},
-    {"Spanish": "Me encanta cocinar en mi tiempo libre.", "English": "I love cooking in my spare time."},
-    {"Spanish": "Creo que deberíamos pedir ayuda.", "English": "I think we should ask for help."},
-    {"Spanish": "Necesito aprender a conducir.", "English": "I need to learn how to drive."},
-    {"Spanish": "Estoy un poco preocupado por el examen.", "English": "I'm a little worried about the exam."},
-    {"Spanish": "Necesito practicar mi español.", "English": "I need to practice my Spanish."},
-    {"Spanish": "¿Dónde puedo encontrar una farmacia?", "English": "Where can I find a pharmacy?"},
-    {"Spanish": "¿Podemos reunirnos más tarde?", "English": "Can we meet later?"},
-    {"Spanish": "¿Puedes prestar atención, por favor?", "English": "Can you pay attention, please?"},
-    {"Spanish": "Me duele la cabeza.", "English": "I have a headache."},
-    {"Spanish": "¿Qué piensas sobre esta situación?", "English": "What do you think about this situation?"},
-    {"Spanish": "Te extraño mucho.", "English": "I miss you a lot."},
-    {"Spanish": "No he terminado de comer.", "English": "I haven't finished eating."},
-    {"Spanish": "¿Cómo puedo llegar al aeropuerto?", "English": "How can I get to the airport?"},
-    {"Spanish": "Estoy emocionado por el viaje.", "English": "I'm excited for the trip."},
-    {"Spanish": "No tengo suficiente dinero.", "English": "I don't have enough money."},
-    {"Spanish": "Creo que estoy enamorado.", "English": "I think I'm in love."},
-    {"Spanish": "La comida está demasiado caliente.", "English": "The food is too hot."},
-    {"Spanish": "¿Puedes pasar el pan, por favor?", "English": "Can you pass the bread, please?"},
-    {"Spanish": "Necesito hacer una llamada.", "English": "I need to make a call."},
-    {"Spanish": "No puedo encontrar mis llaves.", "English": "I can't find my keys."},
-    {"Spanish": "Estoy aprendiendo a tocar el piano.", "English": "I'm learning to play the piano."},
-    {"Spanish": "¿Te gustaría ir al cine esta noche?", "English": "Would you like to go to the cinema tonight?"},
-    {"Spanish": "Estoy tratando de perder peso.", "English": "I'm trying to lose weight."},
-    {"Spanish": "Tengo que terminar este proyecto.", "English": "I have to finish this project."},
-    {"Spanish": "No puedo esperar para verlo.", "English": "I can't wait to see it."}
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy buscando un buen libro para leer.",
+        "native_language": "English",
+        "native_phrase": "I'm looking for a good book to read."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Necesito hablar contigo acerca de algo importante.",
+        "native_language": "English",
+        "native_phrase": "I need to talk to you about something important."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Podrías mostrarme dónde está el baño?",
+        "native_language": "English",
+        "native_phrase": "Could you show me where the bathroom is?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No me siento muy bien hoy.",
+        "native_language": "English",
+        "native_phrase": "I'm not feeling very well today."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Me gustaría comprar un billete de tren.",
+        "native_language": "English",
+        "native_phrase": "I would like to buy a train ticket."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "El clima está muy frío hoy.",
+        "native_language": "English",
+        "native_phrase": "The weather is very cold today."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Cómo te llamas?",
+        "native_language": "English",
+        "native_phrase": "What is your name?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "He olvidado mi contraseña.",
+        "native_language": "English",
+        "native_phrase": "I have forgotten my password."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¡Feliz cumpleaños a ti!",
+        "native_language": "English",
+        "native_phrase": "Happy birthday to you!"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Cuándo es la próxima reunión?",
+        "native_language": "English",
+        "native_phrase": "When is the next meeting?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Me encanta la música clásica.",
+        "native_language": "English",
+        "native_phrase": "I love classical music."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Por favor, no olvides cerrar la puerta.",
+        "native_language": "English",
+        "native_phrase": "Please don't forget to close the door."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy pensando en cambiar de trabajo.",
+        "native_language": "English",
+        "native_phrase": "I'm thinking of changing jobs."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Podrías ayudarme con estos paquetes?",
+        "native_language": "English",
+        "native_phrase": "Could you help me with these packages?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Quisiera un vaso de agua, por favor.",
+        "native_language": "English",
+        "native_phrase": "I would like a glass of water, please."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Tengo una reserva para esta noche.",
+        "native_language": "English",
+        "native_phrase": "I have a reservation for tonight."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No sé cómo hacerlo.",
+        "native_language": "English",
+        "native_phrase": "I don't know how to do it."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Dónde podemos cambiar el dinero?",
+        "native_language": "English",
+        "native_phrase": "Where can we exchange the money?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Hoy es mi primer día de trabajo.",
+        "native_language": "English",
+        "native_phrase": "Today is my first day at work."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Podría hablar más despacio, por favor?",
+        "native_language": "English",
+        "native_phrase": "Could you speak slower, please?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Este fin de semana voy a visitar a mi familia.",
+        "native_language": "English",
+        "native_phrase": "I'm going to visit my family this weekend."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Me perdí en la ciudad.",
+        "native_language": "English",
+        "native_phrase": "I got lost in the city."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No entiendo lo que estás diciendo.",
+        "native_language": "English",
+        "native_phrase": "I don't understand what you're saying."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Puedes recomendarme una buena película?",
+        "native_language": "English",
+        "native_phrase": "Can you recommend a good movie?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Vamos a llegar tarde si no nos vamos ahora.",
+        "native_language": "English",
+        "native_phrase": "We're going to be late if we don't leave now."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Me encanta cocinar en mi tiempo libre.",
+        "native_language": "English",
+        "native_phrase": "I love cooking in my spare time."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Creo que deberíamos pedir ayuda.",
+        "native_language": "English",
+        "native_phrase": "I think we should ask for help."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Necesito aprender a conducir.",
+        "native_language": "English",
+        "native_phrase": "I need to learn how to drive."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy un poco preocupado por el examen.",
+        "native_language": "English",
+        "native_phrase": "I'm a little worried about the exam."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Necesito practicar mi español.",
+        "native_language": "English",
+        "native_phrase": "I need to practice my Spanish."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Dónde puedo encontrar una farmacia?",
+        "native_language": "English",
+        "native_phrase": "Where can I find a pharmacy?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Podemos reunirnos más tarde?",
+        "native_language": "English",
+        "native_phrase": "Can we meet later?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Puedes prestar atención, por favor?",
+        "native_language": "English",
+        "native_phrase": "Can you pay attention, please?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Me duele la cabeza.",
+        "native_language": "English",
+        "native_phrase": "I have a headache."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Qué piensas sobre esta situación?",
+        "native_language": "English",
+        "native_phrase": "What do you think about this situation?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Te extraño mucho.",
+        "native_language": "English",
+        "native_phrase": "I miss you a lot."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No he terminado de comer.",
+        "native_language": "English",
+        "native_phrase": "I haven't finished eating."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Cómo puedo llegar al aeropuerto?",
+        "native_language": "English",
+        "native_phrase": "How can I get to the airport?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy emocionado por el viaje.",
+        "native_language": "English",
+        "native_phrase": "I'm excited for the trip."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No tengo suficiente dinero.",
+        "native_language": "English",
+        "native_phrase": "I don't have enough money."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Creo que estoy enamorado.",
+        "native_language": "English",
+        "native_phrase": "I think I'm in love."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "La comida está demasiado caliente.",
+        "native_language": "English",
+        "native_phrase": "The food is too hot."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Puedes pasar el pan, por favor?",
+        "native_language": "English",
+        "native_phrase": "Can you pass the bread, please?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Necesito hacer una llamada.",
+        "native_language": "English",
+        "native_phrase": "I need to make a call."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No puedo encontrar mis llaves.",
+        "native_language": "English",
+        "native_phrase": "I can't find my keys."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy aprendiendo a tocar el piano.",
+        "native_language": "English",
+        "native_phrase": "I'm learning to play the piano."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "¿Te gustaría ir al cine esta noche?",
+        "native_language": "English",
+        "native_phrase": "Would you like to go to the cinema tonight?"
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Estoy tratando de perder peso.",
+        "native_language": "English",
+        "native_phrase": "I'm trying to lose weight."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "Tengo que terminar este proyecto.",
+        "native_language": "English",
+        "native_phrase": "I have to finish this project."
+    },
+    {
+        "foreign_language": "Spanish",
+        "foreign_phrase": "No puedo esperar para verlo.",
+        "native_language": "English",
+        "native_phrase": "I can't wait to see it."
+    }
 ]
