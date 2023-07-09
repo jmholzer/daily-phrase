@@ -1,10 +1,11 @@
-import json
 import argparse
-from typing import List, Dict
-from sqlalchemy import create_engine, Table, MetaData
-from sqlalchemy.orm import sessionmaker, Session
+import json
 from pathlib import Path
+from typing import Dict, List
 
+from models import Language, Phrase
+from sqlalchemy.future.engine import Engine
+from sqlmodel import Session, SQLModel, create_engine
 
 DATABASE_LOCATION = Path(__file__).parent.resolve() / Path("db/daily_phrase.db")
 print(DATABASE_LOCATION)
@@ -40,76 +41,65 @@ def _load_json_data(json_file: str) -> List[Dict[str, str]]:
     return data
 
 
-def _load_translations(
-    session: Session,
-    table: Table,
-    phrases: List[Dict[str, str]],
-):
+def _create_db_engine() -> Engine:
     """
-    Insert translations into a database table.
-
-    Args:
-        session (Session): SQLAlchemy Session object.
-        table (Table): SQLAlchemy Table object.
-        translations (List[Dict[str, str]]): List of dictionaries with translation data.
-    """
-    for phrase in phrases:
-        foreign_language, native_language = phrase
-        values = {
-            "foreign_language": foreign_language.capitalize(),
-            "native_language": native_language.capitalize(),
-            "foreign_phrase": phrase[foreign_language],
-            "native_phrase": phrase[native_language],
-            "used": 0,
-        }
-        insert_stmt = table.insert().values(**values)
-        session.execute(insert_stmt)
-    session.commit()
-
-
-def _create_db_session() -> Session:
-    """
-    Create and return a new SQLAlchemy session.
+    Create and return a new SQLModel engine.
 
     Returns:
         Session: SQLAlchemy Session object.
     """
-    engine = create_engine("sqlite:///" + str(DATABASE_LOCATION))
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    return session
+    return create_engine("sqlite:///" + str(DATABASE_LOCATION))
 
 
-def _get_table(session: Session, table_name: str) -> Table:
+def _create_db_and_tables(engine: Engine, drop_existing: bool = False) -> None:
     """
-    Get a table from the database.
+    Create a new database and tables.
+    """
+    if drop_existing:
+        SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(engine)
+
+
+def _load_phrases(
+    engine: Engine,
+    phrases: List[Dict[str, str]],
+):
+    """
+    Insert phrases into a database table.
 
     Args:
-        session (Session): SQLAlchemy Session object.
-        table_name (str): Name of the table in the database.
-
-    Returns:
-        Table: SQLAlchemy Table object.
+        engine (Engine): SQLModel/SQLAlchemy Engine object.
+        phrases (List[Dict[str, str]]): List of dictionaries with phrases data.
     """
-    metadata = MetaData()
-    table = Table(table_name, metadata, autoload_with=session.bind)
-    return table
+    phrase_records = []
+    for phrase in phrases:
+        phrase_record = Phrase(
+            foreign_language=Language[phrase["foreign_language"].upper()],
+            native_language=Language[phrase["native_language"].upper()],
+            foreign_phrase=phrase["foreign_phrase"],
+            native_phrase=phrase["native_phrase"],
+        )
+        phrase_records.append(phrase_record)
+
+    with Session(engine) as session:
+        session.add_all(phrase_records)
+        session.commit()
 
 
 def main():
     """
     Main function of the script. It performs the following steps:
     1. Parse command line arguments.
-    2. Create a database session.
-    3. Get the translations table.
-    4. Load JSON data containing translations.
-    5. Load translations into the database.
+    2. Load JSON data containing the phrases.
+    3. Create a database engine.
+    4. Create the database and tables.
+    5. Insert the phrases into the database.
     """
     args = _parse_args()
-    session = _create_db_session()
-    translations_table = _get_table(session, "translations")
     phrases = _load_json_data(args.json)
-    _load_translations(session, translations_table, phrases)
+    engine = _create_db_engine()
+    _create_db_and_tables(engine)
+    _load_phrases(engine, phrases)
 
 
 if __name__ == "__main__":
