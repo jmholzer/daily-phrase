@@ -55,12 +55,3 @@ class AudioPhrase:
         """Retrieve the duration of an audio file stored on disk.
         """
         return mediainfo(str(audio_path))["duration"]
-
-
-def create_audio_files(tmp_path: Path, audio_phrases: list[AudioPhrase]) -> None:
-    """Process a list of AudioPhrase instances by preprocessing their prompts and
-    creating their audio files.
-    """
-    for audio_phrase in audio_phrases:
-        audio_phrase.preprocess_prompts()
-        audio_phrase.create_audio(tmp_path)
