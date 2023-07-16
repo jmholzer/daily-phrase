@@ -6,7 +6,7 @@ import os
 API_KEY = os.environ.get("UNSPLASH_API_KEY")
 
 
-def _fetch_random_image_from_unsplash(country: str, tmp_dir: Path) -> None:
+def download_random_image_from_unsplash(country: str, tmp_dir: Path) -> None:
     image_url = _get_image_url(country)
     file_path = tmp_dir / f"{country}.jpg"
     _download_image(image_url, file_path)
