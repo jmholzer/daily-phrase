@@ -18,6 +18,7 @@ class AudioPhrase:
     """Represents a phrase with its native and foreign audio, and metadata.
     """
 
+    media_dir: Path
     native_phrase: str
     foreign_phrase: str
     native_audio_path: Path | None = None
@@ -25,11 +26,11 @@ class AudioPhrase:
     native_audio_length: float | None = None
     foreign_audio_length: float | None = None
 
-    def __post_init__(self, tmp_media_dir: Path) -> None:
+    def __post_init__(self) -> None:
         """Preprocess the prompts and create the audio files.
         """
-        self.preprocess_prompts()
-        self.create_audio(tmp_path=tmp_media_dir)
+        self._preprocess_prompts()
+        self._create_audio()
 
     def _preprocess_prompts(self) -> None:
         """Preprocess the foreign phrase by replacing spaces with dashes, causing the
@@ -37,12 +38,12 @@ class AudioPhrase:
         """
         self.foreign_phrase = self.foreign_phrase.replace(" ", " - ")
 
-    def _create_audio(self, tmp_path: Path) -> None:
+    def _create_audio(self) -> None:
         """Create the audio files for the native and foreign phrases.
         """
         suffix = hash(self.native_phrase)
-        self.native_audio_path = tmp_path / f"native_audio_{suffix}.mp3"
-        self.foreign_audio_path = tmp_path / f"foreign_audio_{suffix}.mp3"
+        self.native_audio_path = self.media_dir / f"native_audio_{suffix}.mp3"
+        self.foreign_audio_path = self.media_dir / f"foreign_audio_{suffix}.mp3"
         self._create_audio_file(self.native_audio_path, self.native_phrase)
         self._create_audio_file(self.foreign_audio_path, self.foreign_phrase)
         self.native_audio_length = self._get_audio_length(self.native_audio_path)
