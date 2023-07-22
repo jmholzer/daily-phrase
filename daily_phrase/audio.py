@@ -5,12 +5,11 @@ from pydub.utils import mediainfo
 from dataclasses import dataclass
 
 
-TEMP_LOCATION = Path(__file__).parent.resolve() / Path("db/daily_phrase.db")
 VOICE = Voice(
     voice_id="21m00Tcm4TlvDq8ikWAM",
     name="Rachel",
     category="premade",
-    settings=VoiceSettings(stability=0.75, similarity_boost=0.75),
+    settings=VoiceSettings(stability=1.0, similarity_boost=0.75),
 )
 
 
@@ -26,13 +25,19 @@ class AudioPhrase:
     native_audio_length: float | None = None
     foreign_audio_length: float | None = None
 
-    def preprocess_prompts(self) -> None:
+    def __post_init__(self, tmp_media_dir: Path) -> None:
+        """Preprocess the prompts and create the audio files.
+        """
+        self.preprocess_prompts()
+        self.create_audio(tmp_path=tmp_media_dir)
+
+    def _preprocess_prompts(self) -> None:
         """Preprocess the foreign phrase by replacing spaces with dashes, causing the
         TTS to pause between words.
         """
         self.foreign_phrase = self.foreign_phrase.replace(" ", " - ")
 
-    def create_audio(self, tmp_path: Path) -> None:
+    def _create_audio(self, tmp_path: Path) -> None:
         """Create the audio files for the native and foreign phrases.
         """
         suffix = hash(self.native_phrase)
