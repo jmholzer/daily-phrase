@@ -9,22 +9,23 @@ from image import download_random_image_from_unsplash
 from tempfile import TemporaryDirectory
 
 from sqlmodel import Session, select, create_engine
-from models import Phrase
+from models import Phrase, Language, Country
 
 
 DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
+TEMPORARY_MEDIA_PATH = Path(__file__).parent / "tmp/"
 
 
-def main(language: str, country: str) -> None:
+def main(native_language: Language, foreign_language: Language, country: Country) -> None:
     """Main entry point for the daily_phrase package.
     """
-    audio_phrases = _load_phrases()  # TODO: implement this function
+    audio_phrases = _load_phrases()
     with TemporaryDirectory() as tmp_dir:
         tmp_dir = Path(tmp_dir)
         download_random_image_from_unsplash(country, tmp_dir)
 
 
-def _load_phrases(*, native_language: str, foreign_language: str) -> list[AudioPhrase]:
+def _load_phrases(*, native_language: Language, foreign_language: Language) -> list[AudioPhrase]:
     engine = create_engine(f"sqlite:///{DATABASE_PATH}")
     with Session(engine) as session:
         query = (
@@ -35,12 +36,12 @@ def _load_phrases(*, native_language: str, foreign_language: str) -> list[AudioP
                 and Phrase.foreign_language == foreign_language
             )
             .order_by(Phrase.id)
-            .limit(3)
+            .limit(1)
         )
         results = session.exec(query).all()
     return [
         AudioPhrase(
-            Path(__file__).parent / "tmp/",
+            TEMPORARY_MEDIA_PATH,
             result.native_phrase,
             result.foreign_phrase
         )
@@ -49,4 +50,4 @@ def _load_phrases(*, native_language: str, foreign_language: str) -> list[AudioP
 
 
 if __name__ == "__main__":
-    _load_phrases(native_language="english", foreign_language="spanish")
+    main(Language.ENGLISH, Language.SPANISH, Country.Spain)

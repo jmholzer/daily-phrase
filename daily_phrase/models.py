@@ -11,11 +11,14 @@ class Language(str, Enum):
 
     ENGLISH = "english"
     SPANISH = "spanish"
-    GERMAN = "german"
-    ITALIAN = "italian"
-    FRENCH = "french"
-    PORTUGUESE = "portuguese"
-    HINDI = "hindi"
+
+
+class Country(str, Enum):
+    """
+    The set of supported countries for video media.
+    """
+
+    SPAIN = "spain"
 
 
 class Phrase(SQLModel, table=True):
