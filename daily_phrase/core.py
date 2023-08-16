@@ -12,16 +12,14 @@ DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
 TEMPORARY_MEDIA_PATH = Path(__file__).parent / "tmp/"
 
 
-def main(
-    native_language: Language, foreign_language: Language, country: Country
-) -> None:
+def main(country: Country) -> None:
     """Main entry point for the daily_phrase package."""
     audio_phrases = _mock_load_phrases()
     with TemporaryDirectory() as tmp_dir:
         tmp_dir = "tmp/"
         tmp_dir = Path(tmp_dir)
-        download_random_image_from_unsplash(country, tmp_dir)
-        Video(tmp_dir / "spain.jpg", audio_phrases, tmp_dir)
+        image_path = download_random_image_from_unsplash(country, tmp_dir)
+        Video(image_path, audio_phrases, tmp_dir, country.background_music_path)
 
 
 def _mock_load_phrases() -> list[AudioPhrase]:
@@ -70,4 +68,8 @@ def _load_phrases(
 
 
 if __name__ == "__main__":
-    main(Language.ENGLISH, Language.SPANISH, Country.SPAIN)
+    country = Country(
+        name="spain",
+        background_music_path=Path(__file__).parent / "music/sardana-by-kevin-macleod-from-filmmusic-io.mp3"
+    )
+    main(country)

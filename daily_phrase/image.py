@@ -8,10 +8,11 @@ from models import Country
 API_KEY = os.environ.get("UNSPLASH_API_KEY")
 
 
-def download_random_image_from_unsplash(country: Country, tmp_dir: Path) -> None:
-    image_url = _get_image_url(country)
-    file_path = tmp_dir / f"{country}.jpg"
+def download_random_image_from_unsplash(country: Country, tmp_dir: Path) -> Path:
+    image_url = _get_image_url(country.name)
+    file_path = tmp_dir / f"{country.name}.jpg"
     _download_image(image_url, file_path)
+    return file_path
 
 
 def _get_image_url(country: str) -> str:

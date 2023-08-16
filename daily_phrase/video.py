@@ -11,16 +11,23 @@ from moviepy.editor import (
 
 from audio import AudioPhrase
 
+PAUSE_LENGTH = 0.5
+BG_MUSIC_FADEOUT_LENGTH = 3
+BG_MUSIC_VOLUME = 0.15
+TEXT_SIZE = (800, 300)
+TEXT_FONT_SIZE = 70
+
 
 class Video:
     def __init__(
-        self, image_path: Path, audio_phrases: list[AudioPhrase], tmp_media_dir: Path
+        self, image_path: Path, audio_phrases: list[AudioPhrase], tmp_media_dir: Path, bg_music: Path
     ) -> None:
         self._image_path = image_path
         self._audio_phrases = audio_phrases
         self._audio_timings = []
         self._video_length = 0
         self._tmp_dir = tmp_media_dir
+        self._bg_music = bg_music
 
         self._calculate_audio_start_times()
         self._create_video_from_image()
@@ -33,7 +40,7 @@ class Video:
         for phrase in self._audio_phrases:
             self._audio_timings.append((phrase, t))
             t += phrase.native_audio_length + phrase.foreign_audio_length * 2 + 2
-        self._video_length = t
+        self._video_length = t + BG_MUSIC_FADEOUT_LENGTH
 
     def _create_video_from_image(self) -> None:
         print(f"self._image_path: {self._image_path}")
@@ -43,21 +50,26 @@ class Video:
 
     def _add_audio_to_video(self) -> None:
         audio_clips = []
+        bg_music_clip = (
+            AudioFileClip(str(self._bg_music))
+            .subclip(0, self._video_length)
+            .audio_fadeout(BG_MUSIC_FADEOUT_LENGTH)
+            .volumex(BG_MUSIC_VOLUME)
+        )
+        audio_clips.append(bg_music_clip)
+
         for phrase, start_time in self._audio_timings:
             audio_clips.append(
                 AudioFileClip(str(phrase.native_audio_path)).set_start(start_time)
             )
-
-            start_time += phrase.native_audio_length + 0.5
+            start_time += phrase.native_audio_length + PAUSE_LENGTH
             audio_clips.append(
                 AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
             )
-
-            start_time += phrase.foreign_audio_length + 0.5
+            start_time += phrase.foreign_audio_length + PAUSE_LENGTH
             audio_clips.append(
                 AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
             )
-
         self._video = self._video.set_audio(CompositeAudioClip(audio_clips))
 
     def _add_text_overlay(self) -> None:
@@ -67,9 +79,9 @@ class Video:
             native_text_clip = self._create_text_clip(
                 phrase.native_phrase, phrase.native_audio_length, start_time
             )
-            start_time += phrase.native_audio_length + 0.5
+            start_time += phrase.native_audio_length + PAUSE_LENGTH
             foreign_text_clip = self._create_text_clip(
-                phrase.foreign_phrase, phrase.foreign_audio_length * 2 + 0.5, start_time
+                phrase.foreign_phrase, phrase.foreign_audio_length * 2 + PAUSE_LENGTH, start_time
             )
             text_clips.extend([native_text_clip, foreign_text_clip])
         # Overlay the text-background composites onto the video
@@ -80,7 +92,7 @@ class Video:
     ) -> CompositeVideoClip:
         native_text = (
             TextClip(
-                text, fontsize=70, color="white", method="caption", size=(800, 300)
+                text, fontsize=TEXT_FONT_SIZE, color="white", method="caption", size=TEXT_SIZE
             )
             .set_duration(length)
             .set_start(start_time)

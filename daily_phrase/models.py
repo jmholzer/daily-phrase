@@ -2,6 +2,9 @@ from enum import Enum
 from typing import Optional
 
 from sqlmodel import Field, SQLModel
+from pathlib import Path
+
+from dataclasses import dataclass
 
 
 class Language(str, Enum):
@@ -13,12 +16,14 @@ class Language(str, Enum):
     SPANISH = "spanish"
 
 
-class Country(str, Enum):
+@dataclass
+class Country:
     """
-    The set of supported countries for video media.
+    Representation of a country for creating video media.
     """
 
-    SPAIN = "spain"
+    name: str
+    background_music_path: Path
 
 
 class Phrase(SQLModel, table=True):
