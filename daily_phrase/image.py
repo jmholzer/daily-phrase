@@ -1,7 +1,7 @@
-import requests
-from pathlib import Path
 import os
+from pathlib import Path
 
+import requests
 
 from models import Country
 

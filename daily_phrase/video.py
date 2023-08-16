@@ -1,54 +1,107 @@
 from pathlib import Path
+
+from moviepy.editor import (
+    AudioFileClip,
+    ColorClip,
+    CompositeVideoClip,
+    CompositeAudioClip,
+    ImageClip,
+    TextClip,
+)
+
 from audio import AudioPhrase
-from moviepy.editor import ImageClip, TextClip, CompositeVideoClip, concatenate_videoclips, AudioFileClip
 
 
 class Video:
-
-    def __init__(self, image_path: Path, audio_phrases: list[AudioPhrase], tmp_media_dir: Path) -> None:
+    def __init__(
+        self, image_path: Path, audio_phrases: list[AudioPhrase], tmp_media_dir: Path
+    ) -> None:
         self._image_path = image_path
         self._audio_phrases = audio_phrases
-        self._audio_timings = {}
+        self._audio_timings = []
+        self._video_length = 0
         self._tmp_dir = tmp_media_dir
 
         self._calculate_audio_start_times()
         self._create_video_from_image()
+        self._add_text_overlay()
         self._add_audio_to_video()
         self._save_video_file()
 
     def _calculate_audio_start_times(self) -> None:
         t = 0  # Start at 0 seconds
         for phrase in self._audio_phrases:
-            t += phrase.native_audio_length + phrase.foreign_audio_length + 2
-            self._audio_timings[phrase] = t
+            self._audio_timings.append((phrase, t))
+            t += phrase.native_audio_length + phrase.foreign_audio_length * 2 + 2
+        self._video_length = t
 
     def _create_video_from_image(self) -> None:
-        video_length = sum(self._audio_timings.values())
-        self._video = (
-            ImageClip(str(self._image_path), duration=video_length)
-            .resize(height=1920, width=1080)
-        )
+        print(f"self._image_path: {self._image_path}")
+        self._video = ImageClip(
+            str(self._image_path), duration=self._video_length
+        ).resize(height=1920, width=1080)
 
     def _add_audio_to_video(self) -> None:
-        for phrase, start_time in self._audio_timings.items():
-            audio_clip = concatenate_videoclips([
-                AudioFileClip(str(phrase.native_audio_path)),
-                AudioFileClip(str(phrase.foreign_audio_path))
-            ]).set_start(start_time)
-            audio_clip = AudioFileClip(str(phrase.native_audio_path)).set_start(start_time)
-            self._video.set_audio(audio_clip)
+        audio_clips = []
+        for phrase, start_time in self._audio_timings:
+            audio_clips.append(
+                AudioFileClip(str(phrase.native_audio_path)).set_start(start_time)
+            )
 
-    def _add_text_overlay(self, video_path: Path, text: str, start_time: float) -> None:
-        # TODO: Finish
-        video = ImageClip(str(video_path))
-        txt_clip = (
-            TextClip(text, fontsize=70, color='white')
-            .set_position(('center', 'bottom'))
+            start_time += phrase.native_audio_length + 0.5
+            audio_clips.append(
+                AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
+            )
+
+            start_time += phrase.foreign_audio_length + 0.5
+            audio_clips.append(
+                AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
+            )
+
+        self._video = self._video.set_audio(CompositeAudioClip(audio_clips))
+
+    def _add_text_overlay(self) -> None:
+        text_clips = []
+        for phrase, start_time in self._audio_timings:
+            # Create the text clips
+            native_text_clip = self._create_text_clip(
+                phrase.native_phrase, phrase.native_audio_length, start_time
+            )
+            start_time += phrase.native_audio_length + 0.5
+            foreign_text_clip = self._create_text_clip(
+                phrase.foreign_phrase, phrase.foreign_audio_length * 2 + 0.5, start_time
+            )
+            text_clips.extend([native_text_clip, foreign_text_clip])
+        # Overlay the text-background composites onto the video
+        self._video = CompositeVideoClip([self._video] + text_clips)
+
+    def _create_text_clip(
+        self, text: str, length: float, start_time: float
+    ) -> CompositeVideoClip:
+        native_text = (
+            TextClip(
+                text, fontsize=70, color="white", method="caption", size=(800, 300)
+            )
+            .set_duration(length)
             .set_start(start_time)
-            .set_duration()
         )
-        result = CompositeVideoClip([video, txt_clip])
-        result.write_videofile(f"{video_path.parent}/{video_path.stem}_overlay.mp4", codec='libx264')
+        # Create a black background that fits the text
+        background = (
+            ColorClip(size=native_text.size, color=(0, 0, 0))
+            .set_duration(length)
+            .set_start(start_time)
+        )
+        # Overlay the text over the background
+        return CompositeVideoClip([background, native_text]).set_position(
+            ("center", "center")
+        )
 
     def _save_video_file(self) -> None:
-        self._video.write_videofile(self._tmp_dir / "video.mp4", codec='libx264')
+        self._video.write_videofile(
+            str(self._tmp_dir / "video.mp4"),
+            codec="libx264",
+            fps=60,
+            audio_codec="aac",
+            temp_audiofile="temp-audio.m4a",
+            remove_temp=True,
+        )

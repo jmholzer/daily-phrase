@@ -1,31 +1,55 @@
-
 from pathlib import Path
-
-
-from audio import AudioPhrase
-
-
-from image import download_random_image_from_unsplash
 from tempfile import TemporaryDirectory
 
-from sqlmodel import Session, select, create_engine
-from models import Phrase, Language, Country
+from sqlmodel import Session, create_engine, select
 
+from audio import AudioPhrase
+from image import download_random_image_from_unsplash
+from models import Country, Language, Phrase
+from video import Video
 
 DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
 TEMPORARY_MEDIA_PATH = Path(__file__).parent / "tmp/"
 
 
-def main(native_language: Language, foreign_language: Language, country: Country) -> None:
-    """Main entry point for the daily_phrase package.
-    """
-    audio_phrases = _load_phrases()
+def main(
+    native_language: Language, foreign_language: Language, country: Country
+) -> None:
+    """Main entry point for the daily_phrase package."""
+    audio_phrases = _mock_load_phrases()
     with TemporaryDirectory() as tmp_dir:
+        tmp_dir = "tmp/"
         tmp_dir = Path(tmp_dir)
         download_random_image_from_unsplash(country, tmp_dir)
+        Video(tmp_dir / "spain.jpg", audio_phrases, tmp_dir)
 
 
-def _load_phrases(*, native_language: Language, foreign_language: Language) -> list[AudioPhrase]:
+def _mock_load_phrases() -> list[AudioPhrase]:
+    return [
+        AudioPhrase(
+            TEMPORARY_MEDIA_PATH,
+            "I'm looking for a good book to read.",
+            "Estoy buscando un buen libro para leer.",
+            native_audio_path=TEMPORARY_MEDIA_PATH / "native_audio_-917148876481730440.mp3",
+            native_audio_length=1.93,
+            foreign_audio_path=TEMPORARY_MEDIA_PATH / "foreign_audio_-917148876481730440.mp3",
+            foreign_audio_length=3.11,
+        ),
+        AudioPhrase(
+            TEMPORARY_MEDIA_PATH,
+            "I need to talk to you about something important.",
+            "Necesito hablar contigo acerca de algo importante.",
+            native_audio_path=TEMPORARY_MEDIA_PATH / "native_audio_1365006673279825515.mp3",
+            native_audio_length=2.32,
+            foreign_audio_path=TEMPORARY_MEDIA_PATH / "foreign_audio_1365006673279825515.mp3",
+            foreign_audio_length=3.94,
+        ),
+    ]
+
+
+def _load_phrases(
+    *, native_language: Language, foreign_language: Language
+) -> list[AudioPhrase]:
     engine = create_engine(f"sqlite:///{DATABASE_PATH}")
     with Session(engine) as session:
         query = (
@@ -40,14 +64,10 @@ def _load_phrases(*, native_language: Language, foreign_language: Language) -> l
         )
         results = session.exec(query).all()
     return [
-        AudioPhrase(
-            TEMPORARY_MEDIA_PATH,
-            result.native_phrase,
-            result.foreign_phrase
-        )
+        AudioPhrase(TEMPORARY_MEDIA_PATH, result.native_phrase, result.foreign_phrase)
         for result in results
     ]
 
 
 if __name__ == "__main__":
-    main(Language.ENGLISH, Language.SPANISH, Country.Spain)
+    main(Language.ENGLISH, Language.SPANISH, Country.SPAIN)
