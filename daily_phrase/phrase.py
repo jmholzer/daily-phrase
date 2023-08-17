@@ -3,10 +3,9 @@ import json
 from pathlib import Path
 from typing import Dict, List
 
+from models import Language, Phrase
 from sqlalchemy.future.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
-
-from models import Language, Phrase
 
 DATABASE_LOCATION = Path(__file__).parent.resolve() / Path("db/daily_phrase.db")
 print(DATABASE_LOCATION)

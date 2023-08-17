@@ -1,10 +1,9 @@
+from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Optional
 
 from sqlmodel import Field, SQLModel
-from pathlib import Path
-
-from dataclasses import dataclass
 
 
 class Language(str, Enum):

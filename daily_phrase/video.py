@@ -1,28 +1,28 @@
 from pathlib import Path
 
-from moviepy.editor import (
-    AudioFileClip,
-    ColorClip,
-    CompositeVideoClip,
-    CompositeAudioClip,
-    ImageClip,
-    TextClip,
-)
-
 from audio import AudioPhrase
+from moviepy.editor import (AudioFileClip, ColorClip, CompositeAudioClip,
+                            CompositeVideoClip, ImageClip, TextClip)
 
 PAUSE_LENGTH = 0.5
 BG_MUSIC_FADEOUT_LENGTH = 3
 BG_MUSIC_VOLUME = 0.15
 TEXT_SIZE = (800, 300)
 TEXT_FONT_SIZE = 70
+VIDEO_DIMENSIONS = {"height": 1920, "width": 1080}
 
 
 class Video:
     def __init__(
-        self, image_path: Path, audio_phrases: list[AudioPhrase], tmp_media_dir: Path, bg_music: Path
+        self,
+        image_path: Path,
+        introduction: AudioPhrase,
+        audio_phrases: list[AudioPhrase],
+        tmp_media_dir: Path,
+        bg_music: Path,
     ) -> None:
         self._image_path = image_path
+        self._introduction = introduction
         self._audio_phrases = audio_phrases
         self._audio_timings = []
         self._video_length = 0
@@ -46,7 +46,7 @@ class Video:
         print(f"self._image_path: {self._image_path}")
         self._video = ImageClip(
             str(self._image_path), duration=self._video_length
-        ).resize(height=1920, width=1080)
+        ).resize(**VIDEO_DIMENSIONS)
 
     def _add_audio_to_video(self) -> None:
         audio_clips = []
@@ -81,7 +81,9 @@ class Video:
             )
             start_time += phrase.native_audio_length + PAUSE_LENGTH
             foreign_text_clip = self._create_text_clip(
-                phrase.foreign_phrase, phrase.foreign_audio_length * 2 + PAUSE_LENGTH, start_time
+                phrase.foreign_phrase,
+                phrase.foreign_audio_length * 2 + PAUSE_LENGTH,
+                start_time,
             )
             text_clips.extend([native_text_clip, foreign_text_clip])
         # Overlay the text-background composites onto the video
@@ -92,7 +94,11 @@ class Video:
     ) -> CompositeVideoClip:
         native_text = (
             TextClip(
-                text, fontsize=TEXT_FONT_SIZE, color="white", method="caption", size=TEXT_SIZE
+                text,
+                fontsize=TEXT_FONT_SIZE,
+                color="white",
+                method="caption",
+                size=TEXT_SIZE,
             )
             .set_duration(length)
             .set_start(start_time)

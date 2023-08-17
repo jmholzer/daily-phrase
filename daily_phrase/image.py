@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import requests
-
 from models import Country
 
 API_KEY = os.environ.get("UNSPLASH_API_KEY")
