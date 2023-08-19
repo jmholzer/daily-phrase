@@ -8,7 +8,6 @@ from sqlalchemy.future.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
 DATABASE_LOCATION = Path(__file__).parent.resolve() / Path("db/daily_phrase.db")
-print(DATABASE_LOCATION)
 
 
 def _parse_args():
