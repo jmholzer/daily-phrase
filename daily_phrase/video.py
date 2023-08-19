@@ -51,7 +51,6 @@ class Video:
         self._video_length = t + BG_MUSIC_FADEOUT_LENGTH
 
     def _create_video_from_image(self) -> None:
-        print(f"self._image_path: {self._image_path}")
         self._video = ImageClip(
             str(self._image_path), duration=self._video_length
         ).resize(**VIDEO_DIMENSIONS)
