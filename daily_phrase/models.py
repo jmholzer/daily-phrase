@@ -15,16 +15,6 @@ class Language(str, Enum):
     SPANISH = "spanish"
 
 
-@dataclass
-class Country:
-    """
-    Representation of a country for creating video media.
-    """
-
-    name: str
-    background_music_path: Path
-
-
 class Phrase(SQLModel, table=True):
     """
     Phrase represents the SQL table that stores phrases with their translations.,

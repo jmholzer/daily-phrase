@@ -1,33 +1,36 @@
 from pathlib import Path
 
 from audio import AudioPhrase
+from language import LanguageInfo
 from moviepy.editor import (AudioFileClip, ColorClip, CompositeAudioClip,
                             CompositeVideoClip, ImageClip, TextClip)
 
 PAUSE_LENGTH = 0.5
+START_VIDEO_PAUSE_LENGTH = 1
+INTER_PHRASE_PAUSE_LENGTH = 2
 BG_MUSIC_FADEOUT_LENGTH = 3
 BG_MUSIC_VOLUME = 0.15
 TEXT_SIZE = (800, 300)
 TEXT_FONT_SIZE = 70
 VIDEO_DIMENSIONS = {"height": 1920, "width": 1080}
+SAVE_PATH = Path(__file__).parent / "media_output"
 
 
 class Video:
     def __init__(
         self,
+        *,
         image_path: Path,
-        introduction: AudioPhrase,
         audio_phrases: list[AudioPhrase],
         tmp_media_dir: Path,
-        bg_music: Path,
+        language_info: LanguageInfo,
     ) -> None:
         self._image_path = image_path
-        self._introduction = introduction
         self._audio_phrases = audio_phrases
         self._audio_timings = []
         self._video_length = 0
         self._tmp_dir = tmp_media_dir
-        self._bg_music = bg_music
+        self._language_info = language_info
 
         self._calculate_audio_start_times()
         self._create_video_from_image()
@@ -36,10 +39,14 @@ class Video:
         self._save_video_file()
 
     def _calculate_audio_start_times(self) -> None:
-        t = 0  # Start at 0 seconds
-        for phrase in self._audio_phrases:
+        t = START_VIDEO_PAUSE_LENGTH
+        for idx, phrase in enumerate(self._audio_phrases):
             self._audio_timings.append((phrase, t))
-            t += phrase.native_audio_length + phrase.foreign_audio_length * 2 + 2
+            t += (
+                phrase.native_audio_length
+                + phrase.foreign_audio_length * (2 if idx != 0 else 1)
+                + INTER_PHRASE_PAUSE_LENGTH
+            )
         self._video_length = t + BG_MUSIC_FADEOUT_LENGTH
 
     def _create_video_from_image(self) -> None:
@@ -51,14 +58,14 @@ class Video:
     def _add_audio_to_video(self) -> None:
         audio_clips = []
         bg_music_clip = (
-            AudioFileClip(str(self._bg_music))
+            AudioFileClip(str(self._language_info.background_music_path))
             .subclip(0, self._video_length)
             .audio_fadeout(BG_MUSIC_FADEOUT_LENGTH)
             .volumex(BG_MUSIC_VOLUME)
         )
         audio_clips.append(bg_music_clip)
 
-        for phrase, start_time in self._audio_timings:
+        for idx, (phrase, start_time) in enumerate(self._audio_timings):
             audio_clips.append(
                 AudioFileClip(str(phrase.native_audio_path)).set_start(start_time)
             )
@@ -66,6 +73,9 @@ class Video:
             audio_clips.append(
                 AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
             )
+            # Don't repeat the foreign audio for the introduction twice
+            if idx == 0:
+                continue
             start_time += phrase.foreign_audio_length + PAUSE_LENGTH
             audio_clips.append(
                 AudioFileClip(str(phrase.foreign_audio_path)).set_start(start_time)
@@ -74,7 +84,7 @@ class Video:
 
     def _add_text_overlay(self) -> None:
         text_clips = []
-        for phrase, start_time in self._audio_timings:
+        for idx, (phrase, start_time) in enumerate(self._audio_timings):
             # Create the text clips
             native_text_clip = self._create_text_clip(
                 phrase.native_phrase, phrase.native_audio_length, start_time
@@ -82,7 +92,7 @@ class Video:
             start_time += phrase.native_audio_length + PAUSE_LENGTH
             foreign_text_clip = self._create_text_clip(
                 phrase.foreign_phrase,
-                phrase.foreign_audio_length * 2 + PAUSE_LENGTH,
+                phrase.foreign_audio_length * (2 if idx != 0 else 1) + PAUSE_LENGTH,
                 start_time,
             )
             text_clips.extend([native_text_clip, foreign_text_clip])
@@ -116,7 +126,7 @@ class Video:
 
     def _save_video_file(self) -> None:
         self._video.write_videofile(
-            str(self._tmp_dir / "video.mp4"),
+            str(SAVE_PATH / "video.mp4"),
             codec="libx264",
             fps=60,
             audio_codec="aac",
