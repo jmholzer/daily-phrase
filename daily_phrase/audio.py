@@ -43,7 +43,7 @@ class AudioPhrase:
         self._create_audio_file(self.native_audio_path, self.native_phrase)
         self._create_audio_file(self.foreign_audio_path, self.foreign_phrase)
         self.native_audio_length = self._get_audio_length(self.native_audio_path)
-        self.native_audio_length = self._get_audio_length(self.native_audio_path)
+        self.foreign_audio_length = self._get_audio_length(self.foreign_audio_path)
 
     @staticmethod
     def _create_audio_file(output_path: Path, text: str) -> None:
@@ -54,7 +54,7 @@ class AudioPhrase:
     @staticmethod
     def _get_audio_length(audio_path: str | Path) -> float:
         """Retrieve the duration of an audio file stored on disk."""
-        return mediainfo(str(audio_path))["duration"]
+        return float(mediainfo(str(audio_path))["duration"])
 
 
 @dataclass

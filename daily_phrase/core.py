@@ -30,6 +30,7 @@ def _load_phrases(
     language_pair: LanguagePair
 ) -> list[AudioPhrase]:
     engine = create_engine(f"sqlite:///{DATABASE_PATH}")
+    phrases = []
     with Session(engine) as session:
         query = (
             select(Phrase)
@@ -43,11 +44,12 @@ def _load_phrases(
         )
         results = session.exec(query).all()
         for result in results:
+            phrases.append((result.native_phrase, result.foreign_phrase))
             result.used = True
         session.commit()
     return [
-        AudioPhrase(TEMPORARY_MEDIA_PATH, result.native_phrase, result.foreign_phrase)
-        for result in results
+        AudioPhrase(TEMPORARY_MEDIA_PATH, native_phrase, foreign_phrase)
+        for native_phrase, foreign_phrase in phrases
     ]
 
 
