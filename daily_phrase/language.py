@@ -27,13 +27,13 @@ SPANISH = LanguagePair(
         "static-assets/music/sardana-by-kevin-macleod-from-filmmusic-io.mp3"
     ),
     introduction_audio=CachedAudioPhrase(
-        native_phrase="Hello, and welcome to your daily Spanish lesson",
-        foreign_phrase="Hola y bienvenido a tu clase diaria de español",
+        native_phrase="Hello, here are two Spanish phrases for you to learn today.",
+        foreign_phrase="Hola, aquí tienes dos frases en español para aprender hoy.",
         native_audio_path=STATIC_ASSET_PATH
         / "introductions/spanish_introduction_english.mp3",
         foreign_audio_path=STATIC_ASSET_PATH
         / "introductions/spanish_introduction_spanish.mp3",
-        native_audio_length=2.53,
-        foreign_audio_length=4.49,
+        native_audio_length=3.71,
+        foreign_audio_length=6.64,
     ),
 )
