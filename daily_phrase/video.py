@@ -4,6 +4,7 @@ from audio import AudioPhrase, CachedAudioPhrase
 from language import LanguagePair
 from moviepy.editor import (AudioFileClip, ColorClip, CompositeAudioClip,
                             CompositeVideoClip, ImageClip, TextClip)
+import time
 
 PAUSE_LENGTH = 0.5
 START_VIDEO_PAUSE_LENGTH = 1.0
@@ -126,7 +127,7 @@ class Video:
 
     def _save_video_file(self) -> None:
         self._video.write_videofile(
-            str(SAVE_PATH / "video.mp4"),
+            str(SAVE_PATH / f"video{int(time.time() * 1000)}.mp4"),
             codec="libx264",
             fps=60,
             audio_codec="aac",
