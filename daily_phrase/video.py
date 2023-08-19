@@ -1,14 +1,14 @@
 from pathlib import Path
 
-from audio import AudioPhrase
-from language import LanguageInfo
+from audio import AudioPhrase, CachedAudioPhrase
+from language import LanguagePair
 from moviepy.editor import (AudioFileClip, ColorClip, CompositeAudioClip,
                             CompositeVideoClip, ImageClip, TextClip)
 
 PAUSE_LENGTH = 0.5
-START_VIDEO_PAUSE_LENGTH = 1
-INTER_PHRASE_PAUSE_LENGTH = 2
-BG_MUSIC_FADEOUT_LENGTH = 3
+START_VIDEO_PAUSE_LENGTH = 1.0
+INTER_PHRASE_PAUSE_LENGTH = 2.0
+BG_MUSIC_FADEOUT_LENGTH = 3.0
 BG_MUSIC_VOLUME = 0.15
 TEXT_SIZE = (800, 300)
 TEXT_FONT_SIZE = 70
@@ -21,13 +21,13 @@ class Video:
         self,
         *,
         image_path: Path,
-        audio_phrases: list[AudioPhrase],
+        audio_phrases: list[AudioPhrase | CachedAudioPhrase],
         tmp_media_dir: Path,
-        language_info: LanguageInfo,
+        language_info: LanguagePair,
     ) -> None:
         self._image_path = image_path
         self._audio_phrases = audio_phrases
-        self._audio_timings = []
+        self._audio_timings: list[tuple[AudioPhrase | CachedAudioPhrase, float]] = []
         self._video_length = 0
         self._tmp_dir = tmp_media_dir
         self._language_info = language_info

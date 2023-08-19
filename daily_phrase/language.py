@@ -7,17 +7,21 @@ STATIC_ASSET_PATH = Path(__file__).parent / "static-assets/"
 
 
 @dataclass
-class LanguageInfo:
+class LanguagePair:
     """
     Representation of a language necessary to create a video.
     """
 
+    native_language: str
+    foreign_language: str
     country_name: str
     background_music_path: Path
     introduction_audio: CachedAudioPhrase
 
 
-SPANISH = LanguageInfo(
+SPANISH = LanguagePair(
+    native_language="english",
+    foreign_language="spanish",
     country_name="Spain",
     background_music_path=Path(
         "static-assets/music/sardana-by-kevin-macleod-from-filmmusic-io.mp3"

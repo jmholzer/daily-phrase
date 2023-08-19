@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from elevenlabs import Voice, VoiceSettings, generate, save
@@ -19,10 +19,10 @@ class AudioPhrase:
     media_dir: Path
     native_phrase: str
     foreign_phrase: str
-    native_audio_path: Path | None = None
-    foreign_audio_path: Path | None = None
-    native_audio_length: float | None = None
-    foreign_audio_length: float | None = None
+    native_audio_path: Path = field(init=False)
+    foreign_audio_path: Path = field(init=False)
+    native_audio_length: float = field(init=False)
+    foreign_audio_length: float = field(init=False)
 
     def __post_init__(self) -> None:
         """Preprocess the prompts and create the audio files."""
@@ -63,7 +63,7 @@ class CachedAudioPhrase:
 
     native_phrase: str
     foreign_phrase: str
-    native_audio_path: Path | None = None
-    foreign_audio_path: Path | None = None
-    native_audio_length: float | None = None
-    foreign_audio_length: float | None = None
+    native_audio_path: Path
+    foreign_audio_path: Path
+    native_audio_length: float
+    foreign_audio_length: float
