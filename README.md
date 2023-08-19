@@ -12,4 +12,4 @@ python3 phrase.py --json cached_translations/<your_file>.json
 
 ## Upload
 
-Created video files are stored in an S3 bucket. This is currently not configurable. Authorisation is currently handled using `aws configure`.
+Created video files are stored in an S3 bucket. This is currently not configurable. Authorisation is currently handled using the [AWS shared credentials file](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#shared-credentials-file).
