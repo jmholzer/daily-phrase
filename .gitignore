@@ -161,3 +161,7 @@ cython_debug/
 
 # VSCode
 .vscode/
+
+# media directories
+daily_phrase/media_output
+daily_phrase/tmp
