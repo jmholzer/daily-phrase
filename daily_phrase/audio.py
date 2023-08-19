@@ -26,22 +26,21 @@ class AudioPhrase:
 
     def __post_init__(self) -> None:
         """Preprocess the prompts and create the audio files."""
-        self._preprocess_prompts()
         self._create_audio()
 
-    def _preprocess_prompts(self) -> None:
+    def _preprocess_prompt(self, phrase: str) -> str:
         """Preprocess the foreign phrase by replacing spaces with dashes, causing the
         TTS to pause between words.
         """
-        self.foreign_phrase = self.foreign_phrase.replace(" ", " - ")
+        return phrase.replace(" ", " - ")
 
     def _create_audio(self) -> None:
         """Create the audio files for the native and foreign phrases."""
         suffix = abs(hash(self.native_phrase))
         self.native_audio_path = self.media_dir / f"native_audio_{suffix}.mp3"
         self.foreign_audio_path = self.media_dir / f"foreign_audio_{suffix}.mp3"
-        self._create_audio_file(self.native_audio_path, self.native_phrase)
-        self._create_audio_file(self.foreign_audio_path, self.foreign_phrase)
+        self._create_audio_file(self.native_audio_path, self._preprocess_prompt(self.native_phrase))
+        self._create_audio_file(self.foreign_audio_path, self._preprocess_prompt(self.foreign_phrase))
         self.native_audio_length = self._get_audio_length(self.native_audio_path)
         self.foreign_audio_length = self._get_audio_length(self.foreign_audio_path)
 
