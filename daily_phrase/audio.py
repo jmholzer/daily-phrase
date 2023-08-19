@@ -5,15 +5,15 @@ from elevenlabs import Voice, VoiceSettings, generate, save
 from pydub.utils import mediainfo
 
 VOICE = Voice(
-    voice_id="21m00Tcm4TlvDq8ikWAM",
-    name="Rachel",
+    voice_id="XB0fDUnXU5powFXDhCwa",
+    name="Charlotte",
     category="premade",
     settings=VoiceSettings(stability=1.0, similarity_boost=0.75),
 )
 
 
 @dataclass
-class TMPAudioPhrase:
+class AudioPhrase:
     """Represents a phrase with its native and foreign audio, and metadata."""
 
     media_dir: Path
@@ -37,7 +37,7 @@ class TMPAudioPhrase:
 
     def _create_audio(self) -> None:
         """Create the audio files for the native and foreign phrases."""
-        suffix = hash(self.native_phrase)
+        suffix = abs(hash(self.native_phrase))
         self.native_audio_path = self.media_dir / f"native_audio_{suffix}.mp3"
         self.foreign_audio_path = self.media_dir / f"foreign_audio_{suffix}.mp3"
         self._create_audio_file(self.native_audio_path, self.native_phrase)
@@ -58,10 +58,9 @@ class TMPAudioPhrase:
 
 
 @dataclass
-class AudioPhrase:
+class CachedAudioPhrase:
     """Represents a phrase with its native and foreign audio, and metadata."""
 
-    media_dir: Path
     native_phrase: str
     foreign_phrase: str
     native_audio_path: Path | None = None
