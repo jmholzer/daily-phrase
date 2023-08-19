@@ -32,6 +32,7 @@ class Video:
         self._video_length = 0
         self._tmp_dir = tmp_media_dir
         self._language_info = language_info
+        self.video_path = SAVE_PATH / f"video{int(time.time() * 1000)}.mp4"
 
         self._calculate_audio_start_times()
         self._create_video_from_image()
@@ -126,7 +127,7 @@ class Video:
 
     def _save_video_file(self) -> None:
         self._video.write_videofile(
-            str(SAVE_PATH / f"video{int(time.time() * 1000)}.mp4"),
+            str(self.video_path),
             codec="libx264",
             fps=60,
             audio_codec="aac",
