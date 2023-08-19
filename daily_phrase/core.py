@@ -11,6 +11,7 @@ from video import Video
 DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
 TEMPORARY_MEDIA_PATH = Path(__file__).parent / "tmp/"
 STATIC_ASSET_PATH = Path(__file__).parent / "static-assets/"
+NUMBER_OF_PHRASES = 2
 
 
 def main(language_pair: LanguagePair) -> None:
@@ -40,7 +41,7 @@ def _load_phrases(
                 and Phrase.foreign_language == language_pair.foreign_language
             )
             .order_by(Phrase.id)
-            .limit(1)
+            .limit(NUMBER_OF_PHRASES)
         )
         results = session.exec(query).all()
         for result in results:
