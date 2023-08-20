@@ -32,33 +32,51 @@ def main(language_pair: LanguagePair) -> None:
 
 
 def _load_phrases(language_pair: LanguagePair) -> list[AudioPhrase]:
-    engine = create_engine(f"sqlite:///{DATABASE_PATH}")
-    phrases = []
-    with Session(engine) as session:
-        query = (
-            select(Phrase)
-            .where(
-                Phrase.used == False
-                and Phrase.native_language == language_pair.native_language
-                and Phrase.foreign_language == language_pair.foreign_language
-            )
-            .order_by(Phrase.id)
-            .limit(NUMBER_OF_PHRASES)
-        )
-        results = session.exec(query).all()
-        if len(results) < NUMBER_OF_PHRASES:
-            raise ValueError(
-                "Only {len(results)} phrases found for language pair",
-                f"({language_pair.native_language}, {language_pair.foreign_language})"
-            )
-        for result in results:
-            phrases.append((result.native_phrase, result.foreign_phrase))
-            result.used = True
+    with _create_session() as session:
+        results = _fetch_query_results(session, language_pair)
+        _validate_results(results, language_pair)
+        phrases = _convert_to_phrases(results)
         session.commit()
+
     return [
         AudioPhrase(TEMPORARY_MEDIA_PATH, native_phrase, foreign_phrase)
         for native_phrase, foreign_phrase in phrases
     ]
+
+
+def _create_session() -> Session:
+    engine = create_engine(f"sqlite:///{DATABASE_PATH}")
+    return Session(engine)
+
+
+def _fetch_query_results(session: Session, language_pair: LanguagePair):
+    query = (
+        select(Phrase)
+        .where(
+            Phrase.used == False  # noqa: E712
+            and Phrase.native_language == language_pair.native_language
+            and Phrase.foreign_language == language_pair.foreign_language
+        )
+        .order_by(Phrase.id)
+        .limit(NUMBER_OF_PHRASES)
+    )
+    return session.exec(query).all()
+
+
+def _validate_results(results, language_pair: LanguagePair):
+    if len(results) < NUMBER_OF_PHRASES:
+        raise ValueError(
+            f"Only {len(results)} phrases found for language pair "
+            f"({language_pair.native_language}, {language_pair.foreign_language})"
+        )
+
+
+def _convert_to_phrases(results):
+    phrases = []
+    for result in results:
+        phrases.append((result.native_phrase, result.foreign_phrase))
+        result.used = True
+    return phrases
 
 
 if __name__ == "__main__":

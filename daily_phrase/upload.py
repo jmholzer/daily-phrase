@@ -4,9 +4,11 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import NoCredentialsError
 
+from language import LanguagePair
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-from language import LanguagePair
+
 
 BUCKET_NAME = "daily-phrase"
 PROFILE_NAME = "daily-phrase"
