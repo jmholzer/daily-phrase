@@ -17,7 +17,8 @@ def upload_to_s3(file_path: Path) -> None:
     :param bucket: Name of the S3 bucket.
     """
     # Initialize S3 client
-    s3 = boto3.client('s3', profile_name='daily-phrase')
+    session = boto3.Session(profile_name='daily-phrase')
+    s3 = session.client('s3')
     try:
         # Upload file to the specified S3 bucket
         s3.upload_file(file_path, BUCKET_NAME, file_path.name)
