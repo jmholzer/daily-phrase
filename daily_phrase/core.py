@@ -19,19 +19,19 @@ def main(language_pair: LanguagePair) -> None:
     """Main entry point for the daily_phrase package."""
     audio_phrases = [language_pair.introduction_audio] + _load_phrases(language_pair)
     with TemporaryDirectory() as tmp_dir:
-        image_path = download_random_image_from_unsplash(language_pair.country_name, Path(tmp_dir))
+        image_path = download_random_image_from_unsplash(
+            language_pair.country_name, Path(tmp_dir)
+        )
         video = Video(
             image_path=image_path,
             audio_phrases=audio_phrases,
             tmp_media_dir=Path(tmp_dir),
             language_info=language_pair,
         )
-        upload_to_s3(video.video_path)
+        upload_to_s3(video.video_path, language_pair)
 
 
-def _load_phrases(
-    language_pair: LanguagePair
-) -> list[AudioPhrase]:
+def _load_phrases(language_pair: LanguagePair) -> list[AudioPhrase]:
     engine = create_engine(f"sqlite:///{DATABASE_PATH}")
     phrases = []
     with Session(engine) as session:
@@ -46,6 +46,11 @@ def _load_phrases(
             .limit(NUMBER_OF_PHRASES)
         )
         results = session.exec(query).all()
+        if len(results) < NUMBER_OF_PHRASES:
+            raise ValueError(
+                "Only {len(results)} phrases found for language pair",
+                f"({language_pair.native_language}, {language_pair.foreign_language})"
+            )
         for result in results:
             phrases.append((result.native_phrase, result.foreign_phrase))
             result.used = True
