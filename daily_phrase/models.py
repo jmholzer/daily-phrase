@@ -1,6 +1,4 @@
-from dataclasses import dataclass
 from enum import Enum
-from pathlib import Path
 from typing import Optional
 
 from sqlmodel import Field, SQLModel
