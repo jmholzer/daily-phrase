@@ -1,10 +1,11 @@
-from pathlib import Path
 import json
+from pathlib import Path
 
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+from metadata import Metadata
 
 EDUCATION_CATEGORY_ID = "27"
 
@@ -13,29 +14,31 @@ class YouTubeManager:
 
     _instance = None
 
-    def __new__(cls, channel_name):
+    def __new__(cls):
         if cls._instance is None:
             cls._instance = super(YouTubeManager, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, channel_name):
-        self._channel_name = channel_name
-        self.youtube = self._get_authenticated_service()
-
-    def upload_video_to_youtube(self, file_path):
+    def upload_video_to_youtube(self, file_path, video_metadata: Metadata):
         body = {
             "snippet": {
-                "title": "Test video #short",
-                "description": "Uploaded video",
-                "tags": ["sample", "example"],
+                "title": video_metadata.title,
+                "description": "#shorts\n" + video_metadata.description,
+                "tags": [
+                    video_metadata.language_tag,
+                    "language",
+                    "learning",
+                    "education",
+                ],
                 "categoryId": EDUCATION_CATEGORY_ID,
             },
-            "status": {"privacyStatus": "private"},
+            "status": {"privacyStatus": "public"},
         }
         media = MediaFileUpload(file_path, mimetype="video/mp4", resumable=True)
 
+        youtube = self._get_authenticated_service(video_metadata)
         try:
-            request = self.youtube.videos().insert(
+            request = youtube.videos().insert(
                 part=",".join(body.keys()), body=body, media_body=media
             )
             response = request.execute()
@@ -44,8 +47,11 @@ class YouTubeManager:
             print(f"An error occurred: {e}")
             raise ValueError("Failed to upload the video to YouTube.")
 
-    def _get_authenticated_service(self):
-        oauth2_info_path = Path(__file__).parent / f"credentials/{self._channel_name}-oauth2-info.json"
+    def _get_authenticated_service(self, video_metadata: Metadata):
+        oauth2_info_path = (
+            Path(__file__).parent
+            / f"credentials/{video_metadata.channel_name}-oauth2-info.json"
+        )
 
         with open(oauth2_info_path, "r") as file:
             oauth2_info = json.load(file)
@@ -55,7 +61,7 @@ class YouTubeManager:
             refresh_token=oauth2_info["refresh_token"],
             client_id=oauth2_info["client_id"],
             client_secret=oauth2_info["client_secret"],
-            token_uri='https://oauth2.googleapis.com/token'
+            token_uri="https://oauth2.googleapis.com/token",
         )
 
         return build("youtube", "v3", credentials=credentials)
