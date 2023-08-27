@@ -14,7 +14,7 @@ BG_MUSIC_VOLUME = 0.15
 TEXT_SIZE = (800, 300)
 TEXT_FONT_SIZE = 70
 VIDEO_DIMENSIONS = {"height": 1920, "width": 1080}
-SAVE_PATH = Path(__file__).parent / "media_output"
+SAVE_PATH = Path(__file__).parent / "media-output"
 
 
 class Video:
