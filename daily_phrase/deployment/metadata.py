@@ -1,3 +1,5 @@
+from utils import generate_title_formatted_date
+
 class Metadata:
     channel_name: str = None
     title: str = None
@@ -6,8 +8,8 @@ class Metadata:
 
 
 class EnglishSpanishMetadata(Metadata):
-    channel_name: str = "Daily Phrase"
-    title: str = None
+    channel_name: str = "daily-phrase"
+    title: str = f"Your Daily Spanish Phrases {generate_title_formatted_date()}"
     description: str = (
         "Music: Sardana by Kevin MacLeod\n"
         "Free download: https://filmmusic.io/song/5002-sardana\n"

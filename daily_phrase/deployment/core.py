@@ -10,7 +10,6 @@ VIDEO_PATH = Path(__file__).parent / "downloaded-videos"
 def lambda_handler(event, context):
     native_langauge = event.get("native_language")
     foreign_language = event.get("foreign_language")
-    youtube_channel_name = event.get("youtube_channel_name")
     video_metadata = get_video_metadata(native_langauge, foreign_language)
 
     try:
@@ -19,7 +18,7 @@ def lambda_handler(event, context):
             native_langauge, foreign_language, VIDEO_PATH
         )
 
-        youtube_manager = YouTubeManager(youtube_channel_name)
+        youtube_manager = YouTubeManager()
         youtube_manager.upload_video_to_youtube(
             VIDEO_PATH / video_object_key, video_metadata
         )
