@@ -168,5 +168,5 @@ daily_phrase/media-output/*
 daily_phrase/tmp
 
 # credentials
-*/credentials
-!*/credentials/get_auth_token.py
+daily_phrase/deployment/credentials/*
+!daily_phrase/deployment/credentials/get_auth_token.py
