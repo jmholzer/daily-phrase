@@ -10,15 +10,14 @@ from video import Video
 from upload import upload_to_s3
 
 DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
-TEMPORARY_MEDIA_PATH = Path(__file__).parent / "tmp/"
 STATIC_ASSET_PATH = Path(__file__).parent / "static-assets/"
 NUMBER_OF_PHRASES = 2
 
 
 def main(language_pair: LanguagePair) -> None:
     """Main entry point for the daily_phrase package."""
-    audio_phrases = [language_pair.introduction_audio] + _load_phrases(language_pair)
     with TemporaryDirectory() as tmp_dir:
+        audio_phrases = [language_pair.introduction_audio] + _load_phrases(language_pair, Path(tmp_dir))
         image_path = download_random_image_from_unsplash(
             language_pair.country_name, Path(tmp_dir)
         )
@@ -31,7 +30,7 @@ def main(language_pair: LanguagePair) -> None:
         upload_to_s3(video.video_path, language_pair)
 
 
-def _load_phrases(language_pair: LanguagePair) -> list[AudioPhrase]:
+def _load_phrases(language_pair: LanguagePair, tmp_dir: Path) -> list[AudioPhrase]:
     with _create_session() as session:
         results = _fetch_query_results(session, language_pair)
         _validate_results(results, language_pair)
@@ -39,7 +38,7 @@ def _load_phrases(language_pair: LanguagePair) -> list[AudioPhrase]:
         session.commit()
 
     return [
-        AudioPhrase(TEMPORARY_MEDIA_PATH, native_phrase, foreign_phrase)
+        AudioPhrase(tmp_dir, native_phrase, foreign_phrase)
         for native_phrase, foreign_phrase in phrases
     ]
 
