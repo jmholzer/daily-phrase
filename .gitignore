@@ -165,7 +165,8 @@ cython_debug/
 # media directories
 daily_phrase/media-output/*
 !daily_phrase/media-output/.gitkeep
-daily_phrase/tmp
+daily_phrase/deployment/downloaded-videos/*
+!daily_phrase/deployment/downloaded-videos/.gitkeep
 
 # credentials
 daily_phrase/deployment/credentials/*
