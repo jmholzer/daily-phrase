@@ -166,3 +166,7 @@ cython_debug/
 daily_phrase/media-output/*
 !daily_phrase/media-output/.gitkeep
 daily_phrase/tmp
+
+# credentials
+*/credentials
+!*/credentials/get_auth_token.py
