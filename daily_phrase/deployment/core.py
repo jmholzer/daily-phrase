@@ -4,7 +4,7 @@ from youtube import YouTubeManager
 from pathlib import Path
 
 
-VIDEO_PATH = Path(__file__).parent / "video.mp4"
+VIDEO_PATH = Path(__file__).parent / "downloaded-videos"
 
 
 def lambda_handler(event, context):
@@ -14,11 +14,12 @@ def lambda_handler(event, context):
 
     try:
         video_manager = S3VideoManager()
-        video_manager.download_video_clip(native_langauge, foreign_language, VIDEO_PATH)
+        video_object_key = video_manager.download_video_clip(native_langauge, foreign_language, VIDEO_PATH)
 
         youtube_manager = YouTubeManager(youtube_channel_name)
-        youtube_manager.upload_video_to_youtube(VIDEO_PATH)
+        youtube_manager.upload_video_to_youtube(VIDEO_PATH / video_object_key)
 
+        video_manager.set_video_published(video_object_key)
         return {
             'statusCode': 200,
             'body': 'Function executed successfully'

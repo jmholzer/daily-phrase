@@ -15,13 +15,30 @@ class S3VideoManager:
     def __init__(self):
         self._s3_resource, self._s3_client = self._create_s3_session()
 
-    def download_video_clip(self, native_language: str, foreign_language: str, video_path: Path) -> None:
-        video_key = self._find_unpublished_video(native_language, foreign_language)
-        if video_key is None:
+    def download_video_clip(self, native_language: str, foreign_language: str, video_path: Path) -> str:
+        video_object_key = self._find_unpublished_video(native_language, foreign_language)
+        if video_object_key is None:
             raise ValueError(
                 f"No unpublished video with language pair ({native_language}, {foreign_language}) found."
             )
-        self._s3_resource.Bucket(BUCKET_NAME).download_file(video_key, str(video_path))
+        self._s3_resource.Bucket(BUCKET_NAME).download_file(video_object_key, str(video_path / video_object_key))
+        return video_object_key
+
+    def set_video_published(self, object_key: str) -> None:
+        """Sets the 'published' tag of a video to true."""
+        tags = self._get_object_tags(object_key)
+
+        for tag in tags:
+            if tag['Key'] == 'published':
+                tag['Value'] = 'true'
+
+        self._s3_client.put_object_tagging(
+            Bucket=BUCKET_NAME,
+            Key=object_key,
+            Tagging={
+                'TagSet': tags
+            }
+        )
 
     def _create_s3_session(self, profile="daily-phrase"):
         session = boto3.Session(profile_name=profile)
@@ -29,7 +46,7 @@ class S3VideoManager:
         s3_client = session.client('s3')
         return s3_resource, s3_client
 
-    def _get_object_tags(self, object_key):
+    def _get_object_tags(self, object_key: str):
         response = self._s3_client.get_object_tagging(Bucket=BUCKET_NAME, Key=object_key)
         return response.get('TagSet', [])
 
