@@ -2,6 +2,11 @@
 
 Automatically generates short-form video content that teaches viewers a new phrase each day
 
+## Environment variables
+
+export ELEVEN_API_KEY=...
+export UNSPLASH_API_KEY=...
+
 ## Creating new phrases from JSON File
 
 To create new phrase records in the db from a json file, whilst in the root of daily_phrase directory run:
