@@ -32,7 +32,10 @@ class YouTubeManager:
                 ],
                 "categoryId": EDUCATION_CATEGORY_ID,
             },
-            "status": {"privacyStatus": "public"},
+            "status": {
+                "privacyStatus": "public",
+                "selfDeclaredMadeForKids": False,
+            },
         }
         media = MediaFileUpload(file_path, mimetype="video/mp4", resumable=True)
 
