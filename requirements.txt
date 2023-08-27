@@ -1,1 +1,11 @@
+moviepy
+boto3
+botocore
 sqlmodel
+sqlalchemy
+elevenlabs
+pydub
+google.oauth2
+googleapiclient
+google_auth_oauthlib
+google.auth
