@@ -3,7 +3,6 @@ from pathlib import Path
 
 import boto3
 from botocore.exceptions import NoCredentialsError
-
 from language import LanguagePair
 
 logger = logging.getLogger(__name__)

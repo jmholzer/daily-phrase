@@ -1,10 +1,10 @@
+import time
 from pathlib import Path
 
 from audio import AudioPhrase, CachedAudioPhrase
 from language import LanguagePair
 from moviepy.editor import (AudioFileClip, ColorClip, CompositeAudioClip,
                             CompositeVideoClip, ImageClip, TextClip)
-import time
 
 PAUSE_LENGTH = 0.5
 START_VIDEO_PAUSE_LENGTH = 1.0

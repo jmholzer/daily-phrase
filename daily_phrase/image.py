@@ -13,12 +13,10 @@ def download_random_image_from_unsplash(country_name: str, tmp_dir: Path) -> Pat
 
 
 def _download_image(country_name: str, file_path: Path) -> str:
-    url = (
-        f"https://source.unsplash.com/random/1080x1920?{country_name}"
-    )
+    url = f"https://source.unsplash.com/random/1080x1920?{country_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
 
-    with open(file_path, 'wb') as file:
+    with open(file_path, "wb") as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)

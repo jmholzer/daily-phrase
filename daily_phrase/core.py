@@ -6,8 +6,8 @@ from image import download_random_image_from_unsplash
 from language import SPANISH, LanguagePair
 from models import Phrase
 from sqlmodel import Session, create_engine, select
-from video import Video
 from upload import upload_to_s3
+from video import Video
 
 DATABASE_PATH = Path(__file__).parent / "db/daily_phrase.db"
 STATIC_ASSET_PATH = Path(__file__).parent / "static-assets/"
@@ -17,7 +17,9 @@ NUMBER_OF_PHRASES = 2
 def main(language_pair: LanguagePair) -> None:
     """Main entry point for the daily_phrase package."""
     with TemporaryDirectory() as tmp_dir:
-        audio_phrases = [language_pair.introduction_audio] + _load_phrases(language_pair, Path(tmp_dir))
+        audio_phrases = [language_pair.introduction_audio] + _load_phrases(
+            language_pair, Path(tmp_dir)
+        )
         image_path = download_random_image_from_unsplash(
             language_pair.country_name, Path(tmp_dir)
         )

@@ -40,7 +40,9 @@ class AudioPhrase:
         self.native_audio_path = self.media_dir / f"native_audio_{suffix}.mp3"
         self.foreign_audio_path = self.media_dir / f"foreign_audio_{suffix}.mp3"
         self._create_audio_file(self.native_audio_path, self.native_phrase)
-        self._create_audio_file(self.foreign_audio_path, self._preprocess_prompt(self.foreign_phrase))
+        self._create_audio_file(
+            self.foreign_audio_path, self._preprocess_prompt(self.foreign_phrase)
+        )
         self.native_audio_length = self._get_audio_length(self.native_audio_path)
         self.foreign_audio_length = self._get_audio_length(self.foreign_audio_path)
 

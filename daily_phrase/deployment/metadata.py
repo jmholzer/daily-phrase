@@ -10,7 +10,9 @@ class Metadata:
 
 class EnglishSpanishMetadata(Metadata):
     channel_name: str = "daily-phrase"
-    title: str = f"Daily Spanish Phrases 🇪🇸🇲🇽 {generate_title_formatted_date()} #LearnSpanish"
+    title: str = (
+        f"Daily Spanish Phrases 🇪🇸🇲🇽 {generate_title_formatted_date()} #LearnSpanish"
+    )
     description: str = (
         "Master the Spanish language one phrase at a time!\n"
         "Subscribe for daily Spanish lessons! #SpanishPhrases #LearnSpanishFast #Shorts\n"
