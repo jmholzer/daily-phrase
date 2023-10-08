@@ -171,3 +171,6 @@ daily_phrase/deployment/downloaded-videos/*
 # credentials
 daily_phrase/deployment/credentials/*
 !daily_phrase/deployment/credentials/get_auth_token.py
+
+# lambda
+lambda_layer/
