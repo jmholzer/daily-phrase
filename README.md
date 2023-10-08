@@ -1,6 +1,6 @@
 # daily-phrase
 
-[![Python version](https://img.shields.io/badge/python-3.10-blue.svg)]
+![Python version](https://img.shields.io/badge/python-3.10-blue.svg)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-black.svg)](https://github.com/ambv/black)
 
