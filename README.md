@@ -5,6 +5,7 @@ Automatically generates short-form video content that teaches viewers a new phra
 ## Environment variables
 
 export ELEVEN_API_KEY=...
+
 export UNSPLASH_API_KEY=...
 
 ## Creating new phrases from JSON File
