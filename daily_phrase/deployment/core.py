@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from metadata import get_video_metadata
-from s3 import S3VideoManager
-from youtube import YouTubeManager
+from .metadata import get_video_metadata
+from .s3 import S3VideoManager
+from .youtube import YouTubeManager
 
 VIDEO_PATH = Path(__file__).parent / "downloaded-videos"
 
